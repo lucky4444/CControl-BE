@@ -30,6 +30,12 @@
     <ClInclude Include="log.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="MessageHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +48,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="log.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

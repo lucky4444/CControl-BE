@@ -1,6 +1,8 @@
 #include "stdafx.h"
-#include "Client.h"
 #include <iostream>
+#include <unordered_map>
+#include "MessageHandler.h"
+#include "Client.h"
 
 Client::Client(const char * id, bool clean_session) : mosqpp::mosquittopp(id,clean_session)
 {
@@ -11,6 +13,13 @@ Client::Client(const char * id, bool clean_session) : mosqpp::mosquittopp(id,cle
 Client::~Client()
 {
 	log(INFO,"Client destroyed");
+}
+
+int Client::subscribe(int * mid, const char * topic, int qos, std::shared_ptr<MessageHandler> handler)
+{
+	int rc = subscribe(mid, topic, qos);
+
+	return 0;
 }
 
 void Client::log(log_level level,std::string message)

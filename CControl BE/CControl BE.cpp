@@ -31,7 +31,6 @@ int main()
 	if (rc != MOSQ_ERR_SUCCESS) {
 		BOOST_LOG_SEV(lg,ERROR) << mosqpp::strerror(rc);
 	}
-	client.publish(NULL, "Test", 5, "hallo", 1);
 	client.subscribe(NULL, "Test", 1);
 	client.loop_start();
 	while (std::cin.get() != 'q')
