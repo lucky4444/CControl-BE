@@ -9,7 +9,8 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
+#include <string>
 
 
 // TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
+#include  "log.h"
