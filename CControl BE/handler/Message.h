@@ -1,5 +1,5 @@
 #pragma once
-class Message
+struct Message
 {
 	int id;
 	std::string topic;
@@ -8,6 +8,6 @@ class Message
 	int payloadlen;
 	bool retain;
 public:
-	Message(mosquitto_message* msg);
+	Message(const mosquitto_message* msg);
 };
 

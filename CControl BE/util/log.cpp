@@ -1,7 +1,5 @@
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "log.h"
-#include <iostream>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 void log_formatter(const boost::log::record_view &view, boost::log::formatting_ostream &os)
 {

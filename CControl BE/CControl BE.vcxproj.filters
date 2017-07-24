@@ -27,13 +27,19 @@
     <ClInclude Include="Client.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="log.h">
+    <ClInclude Include="handler\Message.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="MessageHandler.h">
+    <ClInclude Include="handler\MessageHandler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Message.h">
+    <ClInclude Include="util\log.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="handler\VolumeHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="handler\handler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +53,13 @@
     <ClCompile Include="Client.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
+    <ClCompile Include="handler\Message.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="MessageHandler.cpp">
+    <ClCompile Include="util\log.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Message.cpp">
+    <ClCompile Include="handler\VolumeHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
