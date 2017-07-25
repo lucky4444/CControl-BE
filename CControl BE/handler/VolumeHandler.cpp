@@ -72,18 +72,24 @@ void VolumeHandler::updateVolume(int volume)
 
 void VolumeHandler::handle(Message msg)
 {
+	BOOST_LOG_SEV(lg, log_level::DEBUG) << "Volume change request received.";
 	pt::ptree payload;
 	std::stringstream stream;
 	stream << msg.payload;
-	pt::read_json(stream, payload);
-	int volume = payload.get("volume",-1);
-	std::string clientid = payload.get<std::string>("clientid");
-	if (clientid != CLIENTID) {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Volume change request for different client received. Ignoring it...";
+	try {
+		pt::read_json(stream, payload);
+	}
+	catch (pt::json_parser_error e) {
+		BOOST_LOG_SEV(lg, log_level::ERR) << "Failed to set volume because change request contains invalid json.";
 		return;
 	}
-	
-	BOOST_LOG_SEV(lg, log_level::DEBUG) << "Volume change request received.";
+
+	int volume = payload.get("volume",-1);
+	std::string clientid = payload.get("clientid","");
+	if (clientid != CLIENTID) {
+		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Received volume change request is for different client. Ignoring it...";
+		return;
+	}
 	
 	try {
 		updateVolume(volume);
