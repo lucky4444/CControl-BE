@@ -9,7 +9,7 @@ void log_formatter(const boost::log::record_view &view, boost::log::formatting_o
 	case INFO:
 		level = "INFO";
 		break;
-	case ERROR:
+	case ERR:
 		level = "ERROR";
 		break;
 	case NOTICE:
@@ -27,14 +27,16 @@ void log_formatter(const boost::log::record_view &view, boost::log::formatting_o
 		view.attribute_values()["Message"].extract<std::string>();
 }
 
-void init_logging() {
+void init_logging(bool writeToFile) {
 	boost::log::add_common_attributes();
 	typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > text_sink;
 	boost::shared_ptr< text_sink > sink = boost::make_shared< text_sink >();
 
-	//auto filestream = boost::make_shared< std::ostream >("CControl.log");
-	//// Add a stream to write log to
-	//sink->locked_backend()->add_stream(filestream);
+	if (writeToFile) {
+		boost::shared_ptr<std::ostream> filestream = boost::make_shared< std::ofstream >("CControl.log");
+		// Add a stream to write log to
+		sink->locked_backend()->add_stream(filestream);
+	}
 
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
 	sink->locked_backend()->add_stream(stream);

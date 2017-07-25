@@ -115,11 +115,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files\boost_1_64_0;C:\Program Files %28x86%29\mosquitto\devel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files\boost_1_64_0\stage\lib;C:\Program Files %28x86%29\mosquitto\devel;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mosquitto.lib;mosquittopp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="handler\handler.h" />
+    <ClInclude Include="util\constants.h" />
     <ClInclude Include="util\log.h" />
     <ClInclude Include="handler\Message.h" />
     <ClInclude Include="handler\MessageHandler.h" />

@@ -58,7 +58,7 @@ void Client::on_log(int level, const char * str)
 		l = INFO;
 		break;
 	case MOSQ_LOG_ERR:
-		l = ERROR;
+		l = ERR;
 		break;
 	case MOSQ_LOG_NOTICE:
 		l = NOTICE;
@@ -70,10 +70,10 @@ void Client::on_log(int level, const char * str)
 		l = WARNING;
 		break;
 	}
-	log(l,str);
+	//log(l,str);
 }
 
 void Client::on_error()
 {
-	log(ERROR,"An error occured");
+	log(ERR,"An error occured");
 }

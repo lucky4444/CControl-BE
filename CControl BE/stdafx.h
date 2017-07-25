@@ -13,6 +13,7 @@
 #include <tchar.h>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <unordered_map>
 
@@ -32,3 +33,8 @@
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
+/*----------------------   own    --------------------------*/
+#include "util/constants.h"

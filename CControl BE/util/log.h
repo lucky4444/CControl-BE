@@ -2,10 +2,10 @@
 
 void log_formatter(const boost::log::record_view &view, boost::log::formatting_ostream &os);
 
-void init_logging();
+void init_logging(bool writeToFile);
 
 enum log_level {
-	ERROR,
+	ERR,
 	WARNING,
 	INFO,
 	NOTICE,
