@@ -38,7 +38,9 @@ void Client::log(log_level level,std::string message)
 
 void Client::on_connect(int rc)
 {
-	log(INFO,"connected");
+	std::stringstream stream;
+	stream << "Connected to mqtt broker " << HOSTNAME;
+	log(INFO,stream.str());
 }
 
 void Client::on_message(const mosquitto_message * message)

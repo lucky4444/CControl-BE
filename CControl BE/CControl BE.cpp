@@ -20,8 +20,8 @@ void addHandlers(Client &client) {
 	client.subscribeWithHandler(NULL, "CControl/Shutdown", 1, volumeHandler);*/
 
 	//stop,play,next song, previous song
-	/*auto playHandler = std::make_shared<PlayHandler>();
-	client.subscribeWithHandler(NULL, "CControl/Play", 1, playHandler);*/
+	auto playHandler = std::make_shared<PlayHandler>();
+	client.subscribeWithHandler(NULL, "CControl/Play", 1, playHandler);
 }
 
 int main()
@@ -37,7 +37,7 @@ int main()
 	Client client(CLIENTID);
 
 	//connect to broker
-	int rc = client.connect(ADDRESS, PORT);
+	int rc = client.connect(HOSTNAME, PORT);
 	if (rc != MOSQ_ERR_SUCCESS) {
 		BOOST_LOG_SEV(lg,log_level::ERR) << "Couldn't establish connection to mqtt broker: " << mosqpp::strerror(rc);
 		return 0;
@@ -47,11 +47,13 @@ int main()
 
 	// start main network loop
 	client.loop_start();
-	while (std::cin.get() != 'q')
+	while (std::cin.get() != 'q'){
 		;
-	client.loop_stop();
+	}
 	//disconnect from broker
 	client.disconnect();
+
+	client.loop_stop();
 	mosqpp::lib_cleanup();
     return 0;
 }
