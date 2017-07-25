@@ -70,6 +70,68 @@ void VolumeHandler::updateVolume(int volume)
 	CoUninitialize();
 }
 
+int VolumeHandler::getVolume()
+{
+	HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	if (FAILED(hr)) {
+		throw std::runtime_error("Could not fetch volume because initialization of COM library failed.");
+	}
+
+	IMMDeviceEnumerator* pEnumerator;
+	const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
+	const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
+	hr = CoCreateInstance(
+		CLSID_MMDeviceEnumerator, NULL,
+		CLSCTX_ALL, IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	if (FAILED(hr)) {
+		CoUninitialize();
+		throw std::runtime_error("Could not fetch volume because initialization of device enumerator failed.");
+	}
+
+	IMMDevice* device;
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &device);
+	pEnumerator->Release();
+	if (FAILED(hr)) {
+		CoUninitialize();
+		if (hr == E_OUTOFMEMORY) {
+			throw std::runtime_error("Could not fetch volume because initialization of default audio endpoint failed. Out of memory!");
+		}
+		else if (hr == E_NOTFOUND) {
+			throw std::runtime_error("Could not fetch volume because initialization of default audio endpoint failed. No device available!");
+		}
+		else {
+			throw std::runtime_error("Could not fetch volume because initialization of default audio endpoint failed for unknown reasons.");
+		}
+	}
+
+	IAudioEndpointVolume* volumeControl;
+	const IID IID_IAudioEndpointVolume = __uuidof(IAudioEndpointVolume);
+	hr = device->Activate(IID_IAudioEndpointVolume, CLSCTX_ALL, NULL, (void**)&volumeControl);
+	device->Release();
+	if (FAILED(hr)) {
+		CoUninitialize();
+		if (hr == E_OUTOFMEMORY) {
+			throw std::runtime_error("Could not fetch volume because activating AudioEndpoint failed. Out of memory!");
+		}
+		else {
+			throw std::runtime_error("Could not fetch volume because activating AudioEndpoint failed for unknown reasons.");
+		}
+	}
+
+	//now actually set the volume
+	//float value = (float)volume / 100;
+	float volume;
+	volumeControl->GetMasterVolumeLevelScalar(&volume);
+
+	//release resources
+	volumeControl->Release();
+
+	CoUninitialize();
+	int volumePerc = volume * 100;
+	return volumePerc;
+}
+
 void VolumeHandler::handle(Message msg)
 {
 	BOOST_LOG_SEV(lg, log_level::DEBUG) << "Volume change request received.";

@@ -6,8 +6,18 @@
 class VolumeHandler : public MessageHandler
 {
 	CControlLogger lg;
-	void updateVolume(int volume);
 public:
+	/*
+	 * Set the master volume to the specified value.
+	 * param volume - volume to set in percentage (0-100)
+	 */
+	static void updateVolume(int volume);
+
+	/*
+	 * Get the current master volume in percentage (0-100)
+	 */
+	static int getVolume();
+
 	/*
 	 * Called when another client wants to change the volume of the default audio device.
 	 * The msg payload must contain the following information formatted as json:
