@@ -1,12 +1,15 @@
 #pragma once
 #include "util\log.h"
 #include "handler\MessageHandler.h"
+#include <mutex>
+#include <thread>
 
 class Client : public mosqpp::mosquittopp
 {	
 private:
 	CControlLogger lg;
 	std::unordered_map<std::string, std::shared_ptr<MessageHandler>> handlers;
+	std::mutex messageMutex;
 public:
 	Client(const char *id = NULL, bool clean_session = true);
 	~Client();

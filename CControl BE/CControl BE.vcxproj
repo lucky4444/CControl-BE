@@ -147,6 +147,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="handler\handler.h" />
     <ClInclude Include="handler\PlayHandler.h" />
+    <ClInclude Include="handler\StatusHandler.h" />
     <ClInclude Include="util\constants.h" />
     <ClInclude Include="util\log.h" />
     <ClInclude Include="handler\Message.h" />
@@ -162,6 +163,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="handler\StatusHandler.cpp" />
     <ClCompile Include="util\log.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>

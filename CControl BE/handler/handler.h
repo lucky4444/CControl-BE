@@ -3,3 +3,4 @@
 #include "MessageHandler.h"
 #include "VolumeHandler.h"
 #include "PlayHandler.h"
+#include "StatusHandler.h"

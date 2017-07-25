@@ -45,11 +45,14 @@ void Client::on_connect(int rc)
 
 void Client::on_message(const mosquitto_message * message)
 {
+	std::unique_lock<std::mutex> guard(messageMutex,std::defer_lock);
+	guard.lock();
 	Message msg(message);
 	auto handler = handlers.find(msg.topic);
 	if (handler != handlers.end()) {
 		handler->second->handle(msg);
 	}
+	guard.unlock();
 }
 
 void Client::on_log(int level, const char * str)

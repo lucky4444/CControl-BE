@@ -12,8 +12,8 @@ void addHandlers(Client &client) {
 	client.subscribeWithHandler(NULL, "CControl/Volume", 1,volumeHandler);
 
 	//post Client name,Volume and Timer
-	/*auto statusHandler = std::make_shared<StatusHandler>();
-	client.subscribeWithHandler(NULL, "CControl/Status/Request", 1, statusHandler);*/
+	auto statusHandler = std::make_shared<StatusHandler>();
+	client.subscribeWithHandler(NULL, "CControl/Status/Request", 1, statusHandler);
 
 	//start timer, reset timer
 	/*auto shutdownHandler = std::make_shared<ShutdownHandler>();
