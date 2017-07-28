@@ -25,11 +25,7 @@ void addHandlers(std::shared_ptr<Client> client) {
 }
 
 int main()
-{
-	//initialize logging
-	init_logging(true);
-	CControlLogger lg;
-	
+{	
 	//initialize mosquitto library
 	mosqpp::lib_init();
 
@@ -39,7 +35,7 @@ int main()
 	//connect to broker
 	int rc = client->connect(HOSTNAME, PORT);
 	if (rc != MOSQ_ERR_SUCCESS) {
-		BOOST_LOG_SEV(lg,log_level::ERR) << "Couldn't establish connection to mqtt broker: " << mosqpp::strerror(rc);
+		LOG_ERROR << "Couldn't establish connection to mqtt broker: " << mosqpp::strerror(rc);
 		return 0;
 	}
 	//add message handlers

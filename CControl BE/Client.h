@@ -1,5 +1,4 @@
 #pragma once
-#include "util\log.h"
 #include "handler\MessageHandler.h"
 #include <mutex>
 #include <thread>
@@ -7,7 +6,6 @@
 class Client : public mosqpp::mosquittopp
 {	
 private:
-	CControlLogger lg;
 	std::unordered_map<std::string, std::shared_ptr<MessageHandler>> handlers;
 	std::mutex messageMutex;
 public:
@@ -15,7 +13,6 @@ public:
 	~Client();
 	int subscribeWithHandler(int* mid, const char * topic, int qos, std::shared_ptr<MessageHandler> handler);
 	int unsubscribeHandler(int* mid, const char * topic);
-	void log(log_level,std::string message);
 	void on_connect(int rc) override;
 	void on_disconnect(int rc) override { return; }
 	void on_publish(int mid) override { return; }

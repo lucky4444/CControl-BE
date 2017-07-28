@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "PlayHandler.h"
+#include "../util/log.h"
 #include <Windows.h>
 
 namespace pt = boost::property_tree;
@@ -34,25 +35,25 @@ void PlayHandler::performAction(std::string action)
 	rc = SendInput(1, &input, sizeof(input));
 	
 	if (rc == 0) {
-		BOOST_LOG_SEV(lg, log_level::ERR) << "Failed to insert event for key down.";
+		LOG_ERROR << "Failed to insert event for key down.";
 	}
 	else {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Inserted " << rc << " event(s) for key down.";
+		LOG_DEBUG << "Inserted " << rc << " event(s) for key down.";
 	}
 
 	input.ki.dwFlags = KEYEVENTF_KEYUP;
 	rc = SendInput(1, &input, sizeof(input));
 	if (rc == 0) {
-		BOOST_LOG_SEV(lg, log_level::ERR) << "Failed to insert event for key up.";
+		LOG_ERROR << "Failed to insert event for key up.";
 	}
 	else {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Inserted " << rc << " event(s) for key up.";
+		LOG_DEBUG << "Inserted " << rc << " event(s) for key up.";
 	}
 }
 
 void PlayHandler::handle(Message msg)
 {
-	BOOST_LOG_SEV(lg, log_level::DEBUG) << "Play change request received.";
+	LOG_DEBUG << "Play change request received.";
 	pt::ptree payload;
 	std::stringstream stream;
 	stream << msg.payload;
@@ -60,14 +61,14 @@ void PlayHandler::handle(Message msg)
 		pt::read_json(stream, payload);
 	}
 	catch (pt::json_parser_error e) {
-		BOOST_LOG_SEV(lg, log_level::ERR) << "Failed to perform play change request because request contains invalid json.";
+		LOG_ERROR << "Failed to perform play change request because request contains invalid json.";
 		return;
 	}
 
 	std::string action = payload.get("action", "");
 	std::string clientid = payload.get("clientid", "");
 	if (clientid != CLIENTID) {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Received play change request is for different client. Ignoring it...";
+		LOG_DEBUG << "Received play change request is for different client. Ignoring it...";
 		return;
 	}
 
@@ -75,17 +76,17 @@ void PlayHandler::handle(Message msg)
 		performAction(action);
 	}
 	catch (std::runtime_error e) {
-		BOOST_LOG_SEV(lg, log_level::ERR) << e.what();
+		LOG_ERROR << e.what();
 		return;
 	}
 
 	if (action == "next") {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Jumped to next song";
+		LOG_DEBUG << "Jumped to next song";
 	}
 	else if (action == "prev") {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Jumped to previous song";
+		LOG_DEBUG << "Jumped to previous song";
 	}
 	else if (action == "play_pause") {
-		BOOST_LOG_SEV(lg, log_level::DEBUG) << "Changed Play/Pause state";
+		LOG_DEBUG << "Changed Play/Pause state";
 	}	
 }

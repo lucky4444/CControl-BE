@@ -1,11 +1,9 @@
 #pragma once
-#include "../util/log.h"
 #include "MessageHandler.h"
 #include "Message.h"
 
 class VolumeHandler : public MessageHandler
 {
-	CControlLogger lg;
 public:
 	/*
 	 * Set the master volume to the specified value.

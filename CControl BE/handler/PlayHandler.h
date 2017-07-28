@@ -1,12 +1,10 @@
 #pragma once
 #include "Message.h"
 #include "MessageHandler.h"
-#include "../util/log.h"
 
 
 class PlayHandler : public MessageHandler
 {
-	CControlLogger lg;
 	void performAction(std::string action);
 public:
 	/*

@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "handler\Message.h"
 #include "Client.h"
+#include "handler\Message.h"
+#include "util\log.h"
 
 Client::Client(const char * id, bool clean_session) : mosqpp::mosquittopp(id,clean_session)
 {
-	std::string name(id);
-	log(INFO,"Client " + name +  " initialized");
+	LOG_INFO << "Client" << (std::string)id << " initialized";
 }
 
 Client::~Client()
 {
-	log(INFO,"Client destroyed");
+	LOG_INFO << "Client destroyed";
 }
 
 int Client::subscribeWithHandler(int * mid, const char * topic, int qos, std::shared_ptr<MessageHandler> handler)
@@ -18,6 +18,7 @@ int Client::subscribeWithHandler(int * mid, const char * topic, int qos, std::sh
 	int rc = subscribe(mid, topic, qos);
 	if (rc == MOSQ_ERR_SUCCESS) {
 		handlers[topic] = handler;
+		LOG_DEBUG << "Suscribed to topic " << topic;
 	}
 	return rc;
 }
@@ -27,24 +28,19 @@ int Client::unsubscribeHandler(int * mid, const char * topic)
 	int rc = unsubscribe(mid,topic);
 	if (rc == MOSQ_ERR_SUCCESS) {
 		handlers.erase(topic);
+		LOG_DEBUG << "Suscribed from topic " << topic;
 	}
 	return rc;
 }
 
-void Client::log(log_level level,std::string message)
-{
-	BOOST_LOG_SEV(lg, level) << message;
-}
-
 void Client::on_connect(int rc)
 {
-	std::stringstream stream;
-	stream << "Connected to mqtt broker " << HOSTNAME;
-	log(INFO,stream.str());
+	LOG_INFO << "Connected to mqtt broker " << HOSTNAME;
 }
 
 void Client::on_message(const mosquitto_message * message)
 {
+	LOG_DEBUG << "Received message for topic " << message->topic;
 	std::unique_lock<std::mutex> guard(messageMutex,std::defer_lock);
 	guard.lock();
 	Message msg(message);
@@ -57,28 +53,26 @@ void Client::on_message(const mosquitto_message * message)
 
 void Client::on_log(int level, const char * str)
 {
-	log_level l = DEBUG;
 	switch (level){
 	case MOSQ_LOG_INFO:
-		l = INFO;
+		LOG_INFO << str;
 		break;
 	case MOSQ_LOG_ERR:
-		l = ERR;
+		LOG_ERROR << str;
 		break;
 	case MOSQ_LOG_NOTICE:
-		l = NOTICE;
+		LOG_INFO << str;
 		break;
-	case MOSQ_LOG_DEBUG:
-		l = DEBUG;
-		break;
+	/*case MOSQ_LOG_DEBUG:
+		LOG_DEBUG << str;
+		break;*/
 	case MOSQ_LOG_WARNING:
-		l = WARNING;
+		LOG_WARNING << str;
 		break;
 	}
-	//log(l,str);
 }
 
 void Client::on_error()
 {
-	log(ERR,"An error occured");
+	LOG_ERROR << "An error occured";
 }
