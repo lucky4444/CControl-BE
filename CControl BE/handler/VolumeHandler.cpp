@@ -1,8 +1,10 @@
 #include "../stdafx.h"
 #include "VolumeHandler.h"
+#include "../util/log.h"
 #include <Windows.h>
 #include <Mmdeviceapi.h>
 #include <endpointvolume.h>
+#include <atlbase.h>
 
 namespace pt = boost::property_tree;
 
@@ -19,7 +21,7 @@ void VolumeHandler::updateVolume(int volume)
 		throw std::runtime_error("Could not set volume because initialization of COM library failed.");
 	}
 	
-	IMMDeviceEnumerator* pEnumerator;
+	CComPtr<IMMDeviceEnumerator> pEnumerator;
 	const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 	const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 	hr = CoCreateInstance(
@@ -31,9 +33,8 @@ void VolumeHandler::updateVolume(int volume)
 		throw std::runtime_error("Could not set volume because initialization of device enumerator failed.");
 	}
 
-	IMMDevice* device;
+	CComPtr<IMMDevice> device;
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &device);
-	pEnumerator->Release();
 	if (FAILED(hr)) {
 		CoUninitialize();
 		if (hr == E_OUTOFMEMORY) {
@@ -47,10 +48,9 @@ void VolumeHandler::updateVolume(int volume)
 		}
 	}
 
-	IAudioEndpointVolume* volumeControl;
+	CComPtr<IAudioEndpointVolume> volumeControl;
 	const IID IID_IAudioEndpointVolume = __uuidof(IAudioEndpointVolume);
 	hr = device->Activate(IID_IAudioEndpointVolume, CLSCTX_ALL, NULL, (void**)&volumeControl);
-	device->Release();
 	if (FAILED(hr)) {
 		CoUninitialize();
 		if (hr == E_OUTOFMEMORY) {
@@ -66,7 +66,6 @@ void VolumeHandler::updateVolume(int volume)
 	volumeControl->SetMasterVolumeLevelScalar(value, NULL);
 
 	//release resources
-	volumeControl->Release();
 	CoUninitialize();
 }
 
@@ -77,7 +76,7 @@ int VolumeHandler::getVolume()
 		throw std::runtime_error("Could not fetch volume because initialization of COM library failed.");
 	}
 
-	IMMDeviceEnumerator* pEnumerator;
+	CComPtr<IMMDeviceEnumerator> pEnumerator;
 	const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
 	const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 	hr = CoCreateInstance(
@@ -89,9 +88,10 @@ int VolumeHandler::getVolume()
 		throw std::runtime_error("Could not fetch volume because initialization of device enumerator failed.");
 	}
 
-	IMMDevice* device;
+	
+
+	CComPtr<IMMDevice> device;
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &device);
-	pEnumerator->Release();
 	if (FAILED(hr)) {
 		CoUninitialize();
 		if (hr == E_OUTOFMEMORY) {
@@ -105,10 +105,9 @@ int VolumeHandler::getVolume()
 		}
 	}
 
-	IAudioEndpointVolume* volumeControl;
+	CComPtr<IAudioEndpointVolume> volumeControl;
 	const IID IID_IAudioEndpointVolume = __uuidof(IAudioEndpointVolume);
 	hr = device->Activate(IID_IAudioEndpointVolume, CLSCTX_ALL, NULL, (void**)&volumeControl);
-	device->Release();
 	if (FAILED(hr)) {
 		CoUninitialize();
 		if (hr == E_OUTOFMEMORY) {
@@ -124,8 +123,6 @@ int VolumeHandler::getVolume()
 	float volume;
 	volumeControl->GetMasterVolumeLevelScalar(&volume);
 
-	//release resources
-	volumeControl->Release();
 
 	CoUninitialize();
 	int volumePerc = volume * 100;
