@@ -2,11 +2,13 @@
 #include "Message.h"
 #include "MessageHandler.h"
 #include "../Client.h"
+#include "ShutdownHandler.h"
 class StatusHandler : public MessageHandler
 {
-	std::shared_ptr<Client> cli;
+	std::weak_ptr<Client> cli;
+	std::shared_ptr<ShutdownHandler> shutdownHandler;
 public:
-	StatusHandler(std::shared_ptr<Client> base);
+	StatusHandler(std::weak_ptr<Client> base,std::shared_ptr<ShutdownHandler> sHandler);
 	void handle(Message msg);
 };
 

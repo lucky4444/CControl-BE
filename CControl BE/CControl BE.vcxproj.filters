@@ -39,9 +39,6 @@
     <ClInclude Include="handler\VolumeHandler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="handler\handler.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="util\constants.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -49,6 +46,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="handler\StatusHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="handler\ShutdownHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="handler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,6 +78,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="handler\StatusHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="handler\ShutdownHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

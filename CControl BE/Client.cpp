@@ -5,7 +5,7 @@
 
 Client::Client(const char * id, bool clean_session) : mosqpp::mosquittopp(id,clean_session)
 {
-	LOG_INFO << "Client" << (std::string)id << " initialized";
+	LOG_INFO << "Client [" << (std::string)id << "] initialized";
 }
 
 Client::~Client()
@@ -35,7 +35,7 @@ int Client::unsubscribeHandler(int * mid, const char * topic)
 
 void Client::on_connect(int rc)
 {
-	LOG_INFO << "Connected to mqtt broker " << HOSTNAME;
+	//LOG_INFO << "Connected to mqtt broker " << HOSTNAME;
 }
 
 void Client::on_message(const mosquitto_message * message)
@@ -75,4 +75,10 @@ void Client::on_log(int level, const char * str)
 void Client::on_error()
 {
 	LOG_ERROR << "An error occured";
+}
+
+void Client::shutdown()
+{
+	InitiateShutdown(NULL, L"CControl Client requested a shutdown",
+		0, SHUTDOWN_FORCE_OTHERS | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_APPLICATION);
 }

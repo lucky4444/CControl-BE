@@ -21,5 +21,6 @@ public:
 	void on_unsubscribe(int mid) override { return; }
 	void on_log(int level, const char * str) override;
 	void on_error() override;
+	void shutdown();
 };
 

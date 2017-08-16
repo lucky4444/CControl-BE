@@ -4,24 +4,24 @@
 #include "stdafx.h"
 #include "Client.h"
 #include "util\log.h"
-#include "handler\handler.h"
+#include "handler.h"
 
 void addHandlers(std::shared_ptr<Client> client) {
 	//set volume
 	auto volumeHandler = std::make_shared<VolumeHandler>();
 	client->subscribeWithHandler(NULL, "CControl/Volume", 1,volumeHandler);
 
-	//post Client name,Volume and Timer
-	std::shared_ptr<StatusHandler> statusHandler(new StatusHandler(client));
-	client->subscribeWithHandler(NULL, "CControl/Status/Request", 1, statusHandler);
-
 	//start timer, reset timer
-	/*auto shutdownHandler = std::make_shared<ShutdownHandler>();
-	client.subscribeWithHandler(NULL, "CControl/Shutdown", 1, volumeHandler);*/
+	auto shutdownHandler = std::make_shared<ShutdownHandler>(client);
+	client->subscribeWithHandler(NULL, "CControl/Shutdown", 1, shutdownHandler);
 
 	//stop,play,next song, previous song
 	auto playHandler = std::make_shared<PlayHandler>();
 	client->subscribeWithHandler(NULL, "CControl/Play", 1, playHandler);
+
+	//post Client name,Volume and Timer
+	auto statusHandler = std::make_shared<StatusHandler>(client,shutdownHandler);
+	client->subscribeWithHandler(NULL, "CControl/Status/Request", 1, statusHandler);
 }
 
 int main()
@@ -33,11 +33,13 @@ int main()
 	std::shared_ptr<Client> client(new Client(CLIENTID));
 
 	//connect to broker
+	LOG_INFO << "Connecting to mqtt broker " << HOSTNAME << "...";
 	int rc = client->connect(HOSTNAME, PORT);
 	if (rc != MOSQ_ERR_SUCCESS) {
 		LOG_ERROR << "Couldn't establish connection to mqtt broker: " << mosqpp::strerror(rc);
 		return 0;
 	}
+	LOG_INFO << "Connection established";
 	//add message handlers
 	addHandlers(client);
 

@@ -5,9 +5,9 @@
 
 namespace pt = boost::property_tree;
 
-StatusHandler::StatusHandler(std::shared_ptr<Client> client) : cli(client)
+StatusHandler::StatusHandler(std::weak_ptr<Client> client,std::shared_ptr<ShutdownHandler> sHandler)
+	: cli(client),shutdownHandler(sHandler)
 {
-	
 }
 
 void StatusHandler::handle(Message msg)
@@ -25,7 +25,7 @@ void StatusHandler::handle(Message msg)
 		pt::ptree tree;
 		tree.add("clientid", CLIENTID);
 		tree.add("volume", volume);
-		tree.add("timer", "0");
+		tree.add("timer", shutdownHandler->getDuration());
 		try {
 			pt::write_json(stream, tree, true);
 		}
@@ -35,8 +35,14 @@ void StatusHandler::handle(Message msg)
 		}
 		std::string payload = stream.str();
 		size_t payloadlen = payload.length();
-		cli->publish(NULL, "CControl/Status/Response", payloadlen, payload.c_str(), 1, false);
-		LOG_DEBUG << "Sent status response.";
+		if (!cli.expired()) {
+			std::shared_ptr<Client> client(cli);
+			client->publish(NULL, "CControl/Status/Response", payloadlen, payload.c_str(), 1, false);
+			LOG_DEBUG << "Sent status response.";
+		}
+		else {
+			LOG_ERROR << "Cannot send status response because client is not referenced anymore.";
+		}
 	}
 	else{
 		LOG_DEBUG << "Received status request for another client. Ignoring...";
