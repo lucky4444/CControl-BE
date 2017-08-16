@@ -5,6 +5,10 @@
 
 namespace pt = boost::property_tree;
 
+PlayHandler::PlayHandler(std::shared_ptr<Client> client) : CLIENTID(client->getId())
+{
+}
+
 void PlayHandler::performAction(std::string action)
 {
 	WORD key;

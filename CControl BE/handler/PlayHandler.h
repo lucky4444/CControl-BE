@@ -1,12 +1,17 @@
 #pragma once
 #include "Message.h"
 #include "MessageHandler.h"
+#include "../Client.h"
 
 
 class PlayHandler : public MessageHandler
 {
+	std::string CLIENTID;
 	void performAction(std::string action);
 public:
+
+	PlayHandler(std::shared_ptr<Client> client);
+
 	/*
 	* Called when another client wants to switch to the next/previous song or pause/play the current song.
 	* The msg payload must contain the following information formatted as json:

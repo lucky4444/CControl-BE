@@ -1,10 +1,16 @@
 #pragma once
 #include "MessageHandler.h"
 #include "Message.h"
+#include "../Client.h"
 
 class VolumeHandler : public MessageHandler
 {
+private:
+	std::string CLIENTID;
 public:
+
+	VolumeHandler(std::shared_ptr<Client> client);
+
 	/*
 	 * Set the master volume to the specified value.
 	 * param volume - volume to set in percentage (0-100)

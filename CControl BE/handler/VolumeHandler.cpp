@@ -8,6 +8,12 @@
 
 namespace pt = boost::property_tree;
 
+
+
+VolumeHandler::VolumeHandler(std::shared_ptr<Client> client) : CLIENTID(client->getId())
+{
+}
+
 void VolumeHandler::updateVolume(int volume)
 {
 	if (volume < 0 || volume > 100) {

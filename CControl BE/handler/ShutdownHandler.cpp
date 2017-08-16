@@ -4,7 +4,8 @@
 
 namespace pt = boost::property_tree;
 
-ShutdownHandler::ShutdownHandler(std::weak_ptr<Client> client) : cli(client),timer(ioservice)
+ShutdownHandler::ShutdownHandler(std::shared_ptr<Client> client)
+	: timer(ioservice), CLIENTID(client->getId())
 {
 	timer.expires_from_now(boost::posix_time::seconds(0));
 	ioservice.run();
@@ -39,7 +40,7 @@ void ShutdownHandler::handle(Message msg)
 		}else {
 			LOG_ERROR << "Unknown action supplied for shutdown handler";
 		}
-	} catch (std::runtime_error e) {
+	} catch (std::runtime_error& e) {
 		LOG_ERROR << e.what();
 		return;
 	}

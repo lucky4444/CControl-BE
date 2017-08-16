@@ -145,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="util\Configuration.h" />
     <ClInclude Include="handler.h" />
     <ClInclude Include="handler\PlayHandler.h" />
     <ClInclude Include="handler\StatusHandler.h" />
@@ -160,6 +162,10 @@
   <ItemGroup>
     <ClCompile Include="CControl BE.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="util\Configuration.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="handler\PlayHandler.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>

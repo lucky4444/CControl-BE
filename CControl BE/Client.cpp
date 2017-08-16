@@ -3,7 +3,8 @@
 #include "handler\Message.h"
 #include "util\log.h"
 
-Client::Client(const char * id, bool clean_session) : mosqpp::mosquittopp(id,clean_session)
+Client::Client(const std::string& id, bool clean_session) 
+	: clientid_(id),mosqpp::mosquittopp(id.c_str(),clean_session)
 {
 	LOG_INFO << "Client [" << (std::string)id << "] initialized";
 }
@@ -31,6 +32,11 @@ int Client::unsubscribeHandler(int * mid, const char * topic)
 		LOG_DEBUG << "Suscribed from topic " << topic;
 	}
 	return rc;
+}
+
+const std::string& Client::getId()
+{
+	return clientid_;
 }
 
 void Client::on_connect(int rc)

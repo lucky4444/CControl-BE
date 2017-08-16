@@ -5,8 +5,8 @@
 
 namespace pt = boost::property_tree;
 
-StatusHandler::StatusHandler(std::weak_ptr<Client> client,std::shared_ptr<ShutdownHandler> sHandler)
-	: cli(client),shutdownHandler(sHandler)
+StatusHandler::StatusHandler(std::shared_ptr<Client> client,std::shared_ptr<ShutdownHandler> sHandler)
+	: cli(client),shutdownHandler(sHandler), CLIENTID(client->getId())
 {
 }
 

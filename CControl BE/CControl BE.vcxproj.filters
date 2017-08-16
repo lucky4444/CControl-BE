@@ -54,6 +54,12 @@
     <ClInclude Include="handler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="util\Configuration.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -81,6 +87,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="handler\ShutdownHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Configuration.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
